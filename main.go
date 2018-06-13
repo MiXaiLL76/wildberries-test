@@ -16,7 +16,7 @@ import (
 func main() {
 
 	k := 5                        //Максимальное число потоков.
-	min := runtime.NumGoroutine() //При запуске программы уже есть некоторые goroutine
+	min := runtime.NumGoroutine() //При запуске программы уже есть некоторые goroutine (Обычно 1)
 	var wg sync.WaitGroup         //Группа ожидания выполнения
 	totalcount := 0               //Всего вхождение "Go"
 
@@ -47,7 +47,8 @@ func main() {
 			count := strings.Count(string(body), "Go")  //Кол-во вхождений подстроки Go в теле ответа
 			totalcount += count                         //Общее количество вхождений подстроки Go
 			fmt.Println("Count for ", url, ": ", count) //Вывод на экран информации по текущему url
-			defer wg.Done()                             //Завершение ожидания одного goroutine
+
+			defer wg.Done() //Завершение ожидания одного goroutine
 		}(text)
 		//Выход из цикла при прочтении всего файла
 		if err == io.EOF {
