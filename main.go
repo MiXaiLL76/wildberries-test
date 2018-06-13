@@ -14,29 +14,19 @@ import (
 )
 
 func main() {
-	//Максимальное число потоков.
-	k := 5
-	var urls []string
+
+	k := 5                        //Максимальное число потоков.
+	min := runtime.NumGoroutine() //При запуске программы уже есть некоторые goroutine
+	var wg sync.WaitGroup         //Группа ожидания выполнения
+	totalcount := 0               //Всего вхождение "Go"
 
 	//Чтение входящих данных
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		text, err := reader.ReadString('\n')       //Чтение строки
 		text = strings.Replace(text, "\n", "", -1) //Удаление перехода из строки
-		urls = append(urls, text)                  //Добавление строки в массив с url
 
-		//Выход из цикла при прочтении всего файла
-		if err == io.EOF {
-			break
-		}
-	}
-
-	min := runtime.NumGoroutine() //При запуске программы уже есть некоторые goroutine
-	var wg sync.WaitGroup         //Группа ожидания выполнения
-	totalcount := 0               //Всего вхождение "Go"
-
-	for _, url := range urls { //Перебор массива urls
-		for runtime.NumGoroutine()-min >= k { // Ждём пока будет можно запустить новый поток
+		for runtime.NumGoroutine()-min >= k { // Ждём пока будет можно запустить новый поток runtime.NumGoroutine() <= k
 		}
 		wg.Add(1) //Перед запуском потока добавляем в группу ожидания
 		//Запуск потока. Можно вынести в отдельную функцию. но тут это не нужно.
@@ -58,9 +48,12 @@ func main() {
 			totalcount += count                         //Общее количество вхождений подстроки Go
 			fmt.Println("Count for ", url, ": ", count) //Вывод на экран информации по текущему url
 			defer wg.Done()                             //Завершение ожидания одного goroutine
-		}(url)
+		}(text)
+		//Выход из цикла при прочтении всего файла
+		if err == io.EOF {
+			break
+		}
 	}
-
 	//Ожидание выполнения всех потоков
 	wg.Wait()
 
