@@ -26,7 +26,7 @@ func main() {
 		text, err := reader.ReadString('\n')       //Чтение строки
 		text = strings.Replace(text, "\n", "", -1) //Удаление перехода из строки
 
-		for runtime.NumGoroutine()-min >= k { // Ждём пока будет можно запустить новый поток runtime.NumGoroutine() <= k
+		for runtime.NumGoroutine()-min >= k { // Ждём пока будет можно запустить новый поток runtime.NumGoroutine() < k
 		}
 		wg.Add(1) //Перед запуском потока добавляем в группу ожидания
 		//Запуск потока. Можно вынести в отдельную функцию. но тут это не нужно.
@@ -56,7 +56,7 @@ func main() {
 		}
 	}
 
-	//Ожидание выполнения всех потоков
+	//Ожидание выполнения всех goroutine
 	wg.Wait()
 
 	//Итоговый вывод
