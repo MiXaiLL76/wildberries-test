@@ -41,14 +41,18 @@ https://godoc.org/golang.org/x/mobile
 
 ## Решение
 
-| Файлы   | Для чего      |
-| ------- | ------------- |
-| main.go | Исходный код  |
-| urls    | Данные список |
+| Файлы   | Для чего       |
+| ------- | -------------- |
+| main.go | Исходный код   |
+| urls    | Входные данные |
+
+Моя система для проверки
 
 ```
 Linux stepanoff-wpc 4.4.0-17134-Microsoft #48-Microsoft Fri Apr 27 18:06:00 PST 2018 x86_64 x86_64 x86_64 GNU/Linux
 ```
+
+Пример запуска
 
 ```
 stepanoff@stepanoff-wpc:/mnt/c/Users/StepanOFF/Desktop/wildberries-test$ cat urls | go run main.go
